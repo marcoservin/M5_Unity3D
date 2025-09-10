@@ -26,7 +26,7 @@ public class MovePlayer : MonoBehaviour
     private float tiempoSaltando; //medir el tiempo desde que se comenzo el salto
     private bool estaSaltando; //saber si el usario esta saltando                                 //
 
-    [SerializeField] private int maxSaltos = 3;    //cuantos saltos podemos hacer antes de tocar el suelo
+    [SerializeField] private int maxSaltos = 2;    //cuantos saltos podemos hacer antes de tocar el suelo
     private int numeroSalto; //cuantos saltos ha hecho el personaje antes de tocar el suelo
 
     // Start is called before the first frame update
