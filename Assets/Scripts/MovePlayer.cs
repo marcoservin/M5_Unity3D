@@ -7,11 +7,16 @@ public class MovePlayer : MonoBehaviour
     private Rigidbody rb;
 
     //MOVIMIENTO
-    [SerializeField] private float velocidadMovimiento = 10;   //etiqueta para ver la variable velocidadMovimiento dentro de Unity
+    [SerializeField] private float velocidadMovimiento = 5;   //etiqueta para ver la variable velocidadMovimiento dentro de Unity
     private float h, v; //h=horizontal v=vertical
     private Vector3 direccion; //variable donde se guarda el vector del movimiento
     [SerializeField] private float velocidadRotacion = 5;
     private Quaternion rotacion;
+
+    public static bool boostVelocidad = false;//indica si el boost de velociada esta activo o no 
+    public static float aumentoVel = 1;//aumento la velocidad (en porcentaje) 
+    public static float duracionBoostVel;
+
 
     //SALTO
     [SerializeField] private float fuerzaSalto = 1;
@@ -23,10 +28,10 @@ public class MovePlayer : MonoBehaviour
     private bool tocandoSuelo = false;
 
     [SerializeField] private float tiempoInicioSalto = 0.25f; //cuanto timepo queremos mantener el salto
-    private float tiempoSaltando; //medir el tiempo desde que se comenzo el salto
-    private bool estaSaltando; //saber si el usario esta saltando                                 //
+    private float tiempoSaltando = 0; //medir el tiempo desde que se comenzo el salto
+    //private bool estaSaltando; //saber si el usario esta saltando                                 //
 
-    [SerializeField] private int maxSaltos = 3;    //cuantos saltos podemos hacer antes de tocar el suelo
+    [SerializeField] public static int maxSaltos = 2;    //cuantos saltos podemos hacer antes de tocar el suelo
     private int numeroSalto; //cuantos saltos ha hecho el personaje antes de tocar el suelo
 
     // Start is called before the first frame update
@@ -50,34 +55,19 @@ public class MovePlayer : MonoBehaviour
         tocandoSuelo = Physics.CheckSphere( //crea una esfera que avisa cuanod esta en contactocon algo
                 detectorSuelos.position,    //posicion del centro de la esfera 
                 radioDetectorsuelos,        //radio de detecion del suelo
-                capaSuelo);                 //solo regresa respuesta si la esfera toca algo
+                capaSuelo);                 //solo regresa respuesta si la esfera toca algo       
 
-
-        if (Input.GetButtonUp("Jump") ) // registra cuando el boton de salto dejo de ser pulsado
+        if (Input.GetButtonUp("Jump")) // registra cuando el boton de salto dejo de ser pulsado
         {
-            estaSaltando = false; //indica que el usario dejo de mantenter el salto
-
+            tiempoSaltando = 0;
             if (numeroSalto < maxSaltos) //si el numero de saltos que dio el personaje es nemor a la cantidad de saltos maximos pertidos antes de tocar el suelo (evita que se agregen saltos extra a los permitidos)
             {
                 numeroSalto++;  //aumenta el numero de saltos dados por el usuario 
-                tiempoSaltando = tiempoInicioSalto; //se establece cuanto timempo es el que queremos que el usuario pueda manter el salto
             }
         }
         if (tocandoSuelo == true)
         {  //reinicia la cantidad de saltos dados por el usuario cuando toca el suelo
             numeroSalto = 0;
-        }
-
-        if (quiereSaltar == true && tocandoSuelo == true)
-        { //si el usaurio pulso la tecla de salto y el personaje esta sobre el suelo
-            estaSaltando = true;    //indica que el jugador esta manteniendo el salto 
-            tiempoSaltando = tiempoInicioSalto; //se establece cuanto timempo es el que queremos que el usuario pueda manter el salto
-
-        }
-        else if (quiereSaltar == true && numeroSalto < maxSaltos)//si se pulsa el boton de salto y la cantidad de saltos hechos es menor a la maxima cantidad de saltos 
-        {
-            estaSaltando = true;    //indica que el jugador esta manteniendo el salto   //indica que el jugador esta manteniedos el salto
-
         }
 
 
@@ -90,8 +80,13 @@ public class MovePlayer : MonoBehaviour
             (h,   //eje x
              0,   //eje y 
              v);  //eje z
-        rb.MovePosition( rb.position + direccion.normalized * velocidadMovimiento * Time.fixedDeltaTime);//el movimiento instantaneo
 
+        if (boostVelocidad) {
+            StartCoroutine(BoostVelocidadCuroutine());
+        }
+        
+        rb.MovePosition( rb.position + direccion.normalized * (velocidadMovimiento * aumentoVel) * Time.fixedDeltaTime);//el movimiento instantaneo
+        //Rotacion del jugador en la direccion que se mueve
         if (direccion.magnitude > 0.1f) //si la magnitud del vector de direccion es mayor que 0.1f el personaje rotara es esa direccion, manteniedo la rotacion
         {
             rotacion = Quaternion.LookRotation(direccion);  //obtiene la rotacion ue tendra el presonaje en base a al vector generado en el movimiento
@@ -100,19 +95,36 @@ public class MovePlayer : MonoBehaviour
 
 
         //salto
-        if (quiereSaltar == true && estaSaltando == true)
-        {  //si el usaurio pulsa la tecla de salto y el jugador esta manteniedo el salto
-            if (tiempoSaltando > 0) //si el tiempo que queda del salto es mayor a 0
+        if (quiereSaltar)
+        {
+            if (tocandoSuelo || numeroSalto < maxSaltos)
             {
-                rb.AddForce(Vector3.up * fuerzaSalto, ForceMode.Impulse);   //salto
-                tiempoSaltando -= Time.fixedDeltaTime;  //se le resta al timepo que se lleva desde que se inicio el salto
-            }
-            else
-            {
-                estaSaltando = false; //si el tiempo que queda del salto es no es mayor a 0 entonces ya no se esta manteniedo el salto
+                saltoCargado();
             }
         }
+        
 
-        Debug.Log("salto  "+ numeroSalto);
+        
+    }
+
+    private void saltoCargado() 
+    {
+        if (tiempoSaltando < tiempoInicioSalto)
+        {
+            rb.velocity = new Vector3 (0, fuerzaSalto, 0);   //salto
+            tiempoSaltando += Time.fixedDeltaTime;  //se le suma el timepo que se lleva desde que se inicio el salto
+        }
+
+    }
+
+    private IEnumerator BoostVelocidadCuroutine()
+    {
+        Debug.Log("aumneto, velociadad al " + aumentoVel*100 + "%");
+
+        yield return new WaitForSeconds(duracionBoostVel);
+
+        aumentoVel = 1;
+        boostVelocidad = false;
+        Debug.Log("velociad actual al " + aumentoVel *100 + "%");
     }
 }
