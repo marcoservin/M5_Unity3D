@@ -1,0 +1,44 @@
+# --- Carpetas que Unity genera automáticamente ---
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# --- Archivos de compilación y cache ---
+*.apk
+*.unitypackage
+*.tmp
+*.bak
+*.pidb
+*.svd
+*.pdb
+*.mdb
+*.opendb
+
+# --- Configuración local de usuario ---
+UserSettings/
+.vs/
+.idea/
+*.suo
+*.user
+*.userprefs
+
+# --- Archivos de proyectos de VS / Rider (se regeneran) ---
+*.csproj
+*.unityproj
+*.sln
+*.booproj
+*.vcxproj
+*.vcxproj.filters
+
+# --- Reportes de errores y sistema ---
+sysinfo.txt
+
+# --- Otras carpetas internas ---
+ExportedObj/
+.consulo/
+.gradle/
+*.iml
