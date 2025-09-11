@@ -7,16 +7,28 @@ public class MovePlayer : MonoBehaviour
     private Rigidbody rb;
 
     //MOVIMIENTO
-    [SerializeField] private float velocidadMovimiento = 5;   //etiqueta para ver la variable velocidadMovimiento dentro de Unity
+    [SerializeField] private float velocidadMovimiento = 5;   //etiqueta para ver la variable velocidadMovimiento dentro de Unity 
     private float h, v; //h=horizontal v=vertical
     private Vector3 direccion; //variable donde se guarda el vector del movimiento
     [SerializeField] private float velocidadRotacion = 5;
     private Quaternion rotacion;
 
-    public static bool boostVelocidad = false;//indica si el boost de velociada esta activo o no 
-    public static float aumentoVel = 1;//aumento la velocidad (en porcentaje) 
-    public static float duracionBoostVel;
+    //modificar la velocidad temporalmente
+    public static float duracionModVel;// tiempo en el que se modificara la velocidad
+    public static float modificadorVel = 1;//aumento/disminuye la velocidad (en porcentaje)
+    private IEnumerator CoroutineModVelociad = null;
 
+    //POWER UP BOOST VELOCIDAD
+    public static bool boostVelocidad = false;//indica si el boost de velociada esta activo o no 
+
+    //DEBUFF REALENTIZAR
+    public static bool debuffVelocidad = false;//indica si el debuff de realentizar se activo
+
+    //DEBUFF INVERTIR CONTROL
+    public static bool debuffInvertir = false;//indica si el debuff de invertir contrrol esta activo
+    public static float duracionInvertir;//tiempo en el que los controloes estaran invertidos
+    private float sentido = 1;
+    private IEnumerator CoroutineInvertirSentido = null;
 
     //SALTO
     [SerializeField] private float fuerzaSalto = 1;
@@ -77,15 +89,39 @@ public class MovePlayer : MonoBehaviour
     {
         //moviminto horizontal y vertical
         direccion = new Vector3       //asigan la velocidad a jugador en los distintos ejes
-            (h,   //eje x
+            (h * sentido,   //eje x sentido se usa para invertir los controles cuando se tome el debuff de invertir controles
              0,   //eje y 
-             v);  //eje z
+             v * sentido);  //eje z
 
-        if (boostVelocidad) {
-            StartCoroutine(BoostVelocidadCuroutine());
+        if (debuffInvertir)
+        {
+            CoroutineInvertirSentido = InvertirControlCoroutine();
+            StartCoroutine(CoroutineInvertirSentido);
+            if (CoroutineInvertirSentido == null)
+            {
+                
+                StopCoroutine(CoroutineInvertirSentido);//reinicia la coroutina
+                CoroutineInvertirSentido = InvertirControlCoroutine();
+                //StartCoroutine(CoroutineModVelociad)
+            }
         }
-        
-        rb.MovePosition( rb.position + direccion.normalized * (velocidadMovimiento * aumentoVel) * Time.fixedDeltaTime);//el movimiento instantaneo
+
+
+        if (boostVelocidad || debuffVelocidad)
+        {
+            CoroutineModVelociad = ModificacionVelocidadCoroutine();
+            StartCoroutine(CoroutineModVelociad);
+            if (CoroutineModVelociad == null) 
+            {
+                
+                StopCoroutine(CoroutineModVelociad);//reinicia la coroutina
+                CoroutineModVelociad = ModificacionVelocidadCoroutine();
+            }
+        }
+
+
+
+        rb.MovePosition( rb.position + direccion.normalized * (velocidadMovimiento * modificadorVel) * Time.fixedDeltaTime);//el movimiento instantaneo
         //Rotacion del jugador en la direccion que se mueve
         if (direccion.magnitude > 0.1f) //si la magnitud del vector de direccion es mayor que 0.1f el personaje rotara es esa direccion, manteniedo la rotacion
         {
@@ -117,14 +153,40 @@ public class MovePlayer : MonoBehaviour
 
     }
 
-    private IEnumerator BoostVelocidadCuroutine()
+    private IEnumerator ModificacionVelocidadCoroutine()
     {
-        Debug.Log("aumneto, velociadad al " + aumentoVel*100 + "%");
+        if (boostVelocidad)
+        {
+            Debug.Log("velocidad aumentada al " + modificadorVel * 100 + "%");
+        }
+        else if (debuffVelocidad)
+        {
+            Debug.Log("velocidad disminuida al " + modificadorVel * 100 + "%");
+        }
+        
+        yield return new WaitForSeconds(duracionModVel);
 
-        yield return new WaitForSeconds(duracionBoostVel);
-
-        aumentoVel = 1;
-        boostVelocidad = false;
-        Debug.Log("velociad actual al " + aumentoVel *100 + "%");
+        modificadorVel = 1;
+        if (boostVelocidad) 
+        {
+            boostVelocidad = false;
+        }
+        else if (debuffVelocidad)
+        {
+            debuffVelocidad = false;
+        }
+        CoroutineModVelociad = null; 
     }
+
+    private IEnumerator InvertirControlCoroutine()
+    {
+        sentido = -1;
+        Debug.Log("control invertido por " + duracionInvertir); 
+        yield return new WaitForSeconds(duracionInvertir);
+        //Debug.Log("contorl normal");
+        debuffInvertir = false;
+        sentido = 1;
+        CoroutineInvertirSentido = null;
+    }
+
 }

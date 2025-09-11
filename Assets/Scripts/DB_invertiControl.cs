@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PU_boostVelocidad : MonoBehaviour
+public class DB_invertiControl : MonoBehaviour
 {
-    [SerializeField] public float duracionBoost = 3f;
-    [SerializeField] public float aumnetoBoost = 0.5f;
-
-    private float velocidadBoost;
+    [SerializeField] private float duracionInvertir = 3f;
 
     // Start is called before the first frame update
     void Start()
@@ -25,9 +22,9 @@ public class PU_boostVelocidad : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            MovePlayer.boostVelocidad = true;
-            MovePlayer.duracionModVel = duracionBoost;
-            MovePlayer.modificadorVel += aumnetoBoost;
+           
+            MovePlayer.debuffInvertir = true;
+            MovePlayer.duracionInvertir = duracionInvertir;
             Destroy(this.gameObject);
         }
 

@@ -5,8 +5,8 @@ using UnityEngine;
 public class levitacion : MonoBehaviour
 {
     private Vector3 posInicial;
-    [SerializeField] private float alturaLevitacion = 0.5f;
-    [SerializeField] private float velocidadLevitacion = 0.1f;
+    [SerializeField] private float alturaLevitacion = 0.2f;
+    [SerializeField] private float velocidadLevitacion = 3f;
     private float offsetVertical;
     // Start is called before the first frame update
     void Start()

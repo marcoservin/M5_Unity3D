@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PU_boostVelocidad : MonoBehaviour
+public class DB_realentizar : MonoBehaviour
 {
-    [SerializeField] public float duracionBoost = 3f;
-    [SerializeField] public float aumnetoBoost = 0.5f;
-
-    private float velocidadBoost;
+    [SerializeField] private float duracionDeBuff = 3f;
+    [SerializeField] private float reduccionVel = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -25,11 +23,12 @@ public class PU_boostVelocidad : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            MovePlayer.boostVelocidad = true;
-            MovePlayer.duracionModVel = duracionBoost;
-            MovePlayer.modificadorVel += aumnetoBoost;
+            MovePlayer.debuffVelocidad = true;
+            MovePlayer.duracionModVel = duracionDeBuff;
+            MovePlayer.modificadorVel -= reduccionVel;
             Destroy(this.gameObject);
         }
 
     }
+
 }
