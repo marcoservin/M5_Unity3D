@@ -62,12 +62,17 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\DB_invertiControl.cs" />
     <Compile Include="Assets\Scripts\CamaraFollow.cs" />
+    <Compile Include="Assets\Scripts\Monedas_Prueba\Circuito.cs" />
     <Compile Include="Assets\Scripts\MovePlayer.cs" />
+    <Compile Include="Assets\Scripts\Monedas.cs" />
     <Compile Include="Assets\Scripts\zonaSegura.cs" />
     <Compile Include="Assets\Scripts\PU_boostVelocidad.cs" />
+    <Compile Include="Assets\Scripts\Monedas_Prueba\Circuito_Levitar.cs" />
+    <Compile Include="Assets\Scripts\Lava\Lava.cs" />
     <Compile Include="Assets\Scripts\PU_saltoExtra.cs" />
     <Compile Include="Assets\Scripts\levitacion.cs" />
     <Compile Include="Assets\Scripts\DB_realentizar.cs" />
+    <Compile Include="Assets\Scripts\Rotacion.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
