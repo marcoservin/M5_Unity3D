@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Destino
+  - PM_Ruta1
+  - PM_Ruta2
   layers:
   - Default
   - TransparentFX
