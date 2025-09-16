@@ -7,6 +7,8 @@ TagManager:
   - Destino
   - PM_Ruta1
   - PM_Ruta2
+  - TeleportA
+  - TeleportB
   layers:
   - Default
   - TransparentFX
