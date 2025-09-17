@@ -7,7 +7,7 @@ public class Teletransportacion : MonoBehaviour
     // Start is called before the first frame update
     private GameObject TPA;
     private GameObject TPB;
-    private bool dentrodelTP = false;
+    private bool dentrodelTP = true;
 
     void Start()
     {
