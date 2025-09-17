@@ -16,11 +16,11 @@ public class PlataformaMovil : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PM_puntosDestino = GameObject.FindGameObjectsWithTag(ruta);
+       //PM_puntosDestino = GameObject.FindGameObjectsWithTag(ruta);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Vector3.Distance(this.transform.position, PM_puntosDestino[indice].transform.position) <= 0.1f)
         {
@@ -51,13 +51,15 @@ public class PlataformaMovil : MonoBehaviour
 
         if (espera)
         {
-            this.transform.position = Vector3.MoveTowards(this.transform.position, PM_puntosDestino[indice].transform.position, velocidad * Time.deltaTime);
+            this.transform.position = Vector3.MoveTowards(this.transform.position, PM_puntosDestino[indice].transform.position, velocidad * Time.fixedDeltaTime);
         }
 
     }
 
 
-  
+    
+
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Player"))

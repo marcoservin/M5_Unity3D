@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -993,7 +993,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19b9feb0cad9d3f49aae215964081689, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PM_puntosDestino: []
+  PM_puntosDestino:
+  - {fileID: 1067314885}
+  - {fileID: 2118795946}
+  - {fileID: 2081991023}
+  - {fileID: 185950862}
   velocidad: 10
   ruta: PM_Ruta2
   tiempoEspera: 3
@@ -1926,7 +1930,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19b9feb0cad9d3f49aae215964081689, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PM_puntosDestino: []
+  PM_puntosDestino:
+  - {fileID: 1536840505}
+  - {fileID: 595418747}
+  - {fileID: 94580178}
+  - {fileID: 942917557}
   velocidad: 10
   ruta: PM_Ruta1
   tiempoEspera: 3
